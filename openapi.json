@@ -9,14 +9,14 @@
     "paths": {
       "/api/query": {
         "post": {
-          "description": "Executes a MySQL query to retrieve data.",
-          "operationId": "mysql_query",
+          "description": "Executes a supabase query to retrieve data.",
+          "operationId": "query",
           "parameters": [],
           "requestBody": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/mysql_queryRequestSchema"
+                  "$ref": "#/components/schemas/queryModel"
                 }
               }
             },
@@ -41,42 +41,82 @@
             }
           }
         }
+      },
+    "/api/insert": {
+        "post": {
+          "description": "Executes a supabase insert data.",
+          "operationId": "insert",
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/insertModel"
+                }
+              }
+            },
+            "required": true
+          },
+          "deprecated": false,
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "result": {
+                        "description": "The insert result"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "components": {
       "schemas": {
-        "mysql_queryRequestSchema": {
+        "queryModel": {
+          "type": "object",
           "properties": {
-            "host": {
+            "table": {
               "type": "string",
-              "title": "host",
-              "description": "Database host"
+              "description": "The name of the table to query."
             },
-            "user": {
+            "select": {
               "type": "string",
-              "title": "user",
-              "description": "Database user"
+              "description": "The selection string specifying the fields to return."
             },
-            "password": {
-              "type": "string",
-              "title": "password",
-              "description": "Database password"
-            },
-            "database": {
-              "type": "string",
-              "title": "database",
-              "description": "Database name"
-            },
-            "query": {
-              "type": "string",
-              "title": "query",
-              "description": "A MySQL query that will be executed"
+            "conditions": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              },
+              "description": "A dictionary of conditions to filter the query."
             }
           },
+          "required": ["table", "select", "conditions"],
+          "description": "A model for querying data from a database table with specific conditions."
+        },
+        "insertModel": {
           "type": "object",
-          "required": ["host", "user", "password", "database", "query"],
-          "title": "mysql_queryRequestSchema"
+          "properties": {
+            "table": {
+              "type": "string",
+              "description": "The name of the table where data will be inserted."
+            },
+            "data": {
+              "type": "object",
+              "additionalProperties": true,
+              "description": "The data to be inserted into the table. This is a dictionary where each key-value pair represents a column name and its value to be inserted."
+            }
+          },
+          "required": ["table", "data"],
+          "description": "A model for inserting data into a database table."
         }
-      }
     }
   }
