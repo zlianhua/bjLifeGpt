@@ -1,17 +1,11 @@
-import mysql.connector
-
-def mysql_connect(host: str, user: str, password: str, database: str):
-    connection = mysql.connector.connect(
-        host=host,
-        user=user,
-        password=password,
-        database=database
-    )
-    cursor = connection.cursor()
-    return cursor, connection
-
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Request
+from pydantic import BaseModel
+from supabase import create_client, Client
 from fastapi.middleware.cors import CORSMiddleware
+
+SUPABASE_URL = 'https://aauhpkygxsnooxvpqqqy.supabase.co'
+SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFhdWhwa3lneHNub294dnBxcXF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODc3NTc2MjQsImV4cCI6MjAwMzMzMzYyNH0.kEOf2y2gKWHwHDz2pb3fe11AI8WKosaW5MCwnLhSkwI'
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 app = FastAPI()
 
@@ -23,48 +17,36 @@ app.add_middleware(
   allow_credentials=True
 )
 
-from fastapi import Request
+class QueryModel(BaseModel):
+    table: str
+    select: str
+    conditions: dict
+    
+class InsertModel(BaseModel):
+    table: str
+    data: dict
 
-@app.post('/api/query')
-async def query(request: Request):
-    try:
-        # Parse request json to get request body
-        body = await request.json()
+@app.post("/insert")
+async def insert(data: InsertModel):
+    response = supabase.table(data.table).insert(data.data).execute()
 
-        # Establish a database connection
-        cursor, connection = mysql_connect(
-            body.get('host'),
-            body.get('user'),
-            body.get('password'),
-            body.get('database')
-        )
+    if response.error:
+        raise HTTPException(status_code=400, detail=str(response.error))
+    return {"message": "Insert successful", "data": response.data}    
 
-        # Extract a query from the request body
-        query = body.get('query')
+@app.post("/query")
+async def query(data: QueryModel):
+    query = supabase.table(data.table).select(data.select)
 
-        # Execute query
-        cursor.execute(query)
-        query_result = cursor.fetchall()
+    # 这里简化条件处理，具体实现依据conditions内容而定
+    for condition, value in data.conditions.items():
+        query = query.filter(condition, value)
 
-        # Normalize and prepare the result
-        result = []
-        column_names = [column[0] for column in cursor.description]
-        for row in query_result:
-            row_dict = {}
-            for i in range(len(column_names)):
-                row_dict[column_names[i]] = row[i]
-            result.append(row_dict)
+    response = query.execute()
 
-        # Close connection
-        cursor.close()
-        connection.close()
-
-        return {'result': result}
-    except Exception as e:
-        return {'error': e.msg}
-
-import os
-from fastapi.responses import FileResponse
+    if response.error:
+        raise HTTPException(status_code=400, detail=str(response.error))
+    return response.data
 
 @app.get('/openapi.json')
 def get_openapi():
