@@ -42,7 +42,7 @@
           }
         }
       },
-    "/api/insert": {
+      "/api/insert": {
         "post": {
           "description": "Executes a supabase insert data.",
           "operationId": "insert",
@@ -118,5 +118,6 @@
           "required": ["table", "data"],
           "description": "A model for inserting data into a database table."
         }
+      }  
     }
-  }
+}
