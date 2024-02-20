@@ -9,13 +9,13 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 app = FastAPI()
 
-app.add_middleware(
-  CORSMiddleware,
-  allow_origins=["https://chat.openai.com","https://bj-life-gpt.vercel.app"],
-  allow_methods=["*"],
-  allow_headers=["*"],
-  allow_credentials=True
-)
+# app.add_middleware(
+#   CORSMiddleware,
+#   allow_origins=["https://chat.openai.com","https://bj-life-gpt.vercel.app"],
+#   allow_methods=["*"],
+#   allow_headers=["*"],
+#   allow_credentials=True
+# )
 
 class QueryModel(BaseModel):
     table: str
@@ -30,8 +30,8 @@ class InsertModel(BaseModel):
 async def insert(data: InsertModel):
     response = supabase.table(data.table).insert(data.data).execute()
 
-    if response.error:
-        raise HTTPException(status_code=400, detail=str(response.error))
+    # if response.error:
+    #     raise HTTPException(status_code=400, detail=str(response.error))
     return {"message": "Insert successful", "data": response.data}    
 
 @app.post("/query")
@@ -44,8 +44,8 @@ async def query(data: QueryModel):
 
     response = query.execute()
 
-    if response.error:
-        raise HTTPException(status_code=400, detail=str(response.error))
+    # if response.error:
+    #     raise HTTPException(status_code=400, detail=str(response.error))
     return response.data
 
 @app.get('/openapi.json')
