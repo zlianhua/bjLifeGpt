@@ -26,6 +26,10 @@ class InsertModel(BaseModel):
     table: str
     data: dict
 
+@app.get("/")
+async def read_root():
+    return {"Hello": "World"}    
+
 @app.post("/insert")
 async def insert(data: InsertModel):
     response = supabase.table(data.table).insert(data.data).execute()
