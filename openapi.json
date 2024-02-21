@@ -92,7 +92,7 @@
               "description": "The selection string specifying the fields to return."
             },
             "conditions": {
-              "type": "string",
+              "type": "object",
               "description": "The selection string specifying the fields to return."
             }
           },
