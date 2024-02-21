@@ -9,13 +9,13 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 app = FastAPI()
 
-# app.add_middleware(
-#   CORSMiddleware,
-#   allow_origins=["https://chat.openai.com","https://bj-life-gpt.vercel.app"],
-#   allow_methods=["*"],
-#   allow_headers=["*"],
-#   allow_credentials=True
-# )
+app.add_middleware(
+  CORSMiddleware,
+  allow_origins=["https://chat.openai.com","https://bj-life-gpt.vercel.app"],
+  allow_methods=["*"],
+  allow_headers=["*"],
+  allow_credentials=True
+)
 
 class QueryModel(BaseModel):
     table: str
