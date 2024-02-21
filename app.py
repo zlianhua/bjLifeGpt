@@ -43,8 +43,8 @@ async def query(data: QueryModel):
     query = supabase.table(data.table).select(data.select)
 
     # 这里简化条件处理，具体实现依据conditions内容而定
-    for condition, value in data.conditions.items():
-        query = query.filter(condition, value)
+    # for condition, value in data.conditions.items():
+    #     query = query.filter(condition, value)
 
     response = query.execute()
 
