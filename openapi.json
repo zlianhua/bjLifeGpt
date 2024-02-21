@@ -99,8 +99,8 @@
               "description": "A dictionary of conditions to filter the query."
             }
           },
-          "required": ["table", "select", "conditions"],
-          "description": "A model for querying data from a database table with specific conditions."
+          "required": ["table", "select"],
+          "description": "A model for querying data from a database table with optional specific conditions."
         },
         "insertModel": {
           "type": "object",
