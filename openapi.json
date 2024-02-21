@@ -7,7 +7,7 @@
     },
     "servers": [{ "url": "https://bj-life-gpt.vercel.app" }],
     "paths": {
-      "/api/query": {
+      "/query": {
         "post": {
           "description": "Executes a supabase query to retrieve data.",
           "operationId": "query",
@@ -42,7 +42,7 @@
           }
         }
       },
-      "/api/insert": {
+      "/insert": {
         "post": {
           "description": "Executes a supabase insert data.",
           "operationId": "insert",
