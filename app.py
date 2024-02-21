@@ -28,17 +28,9 @@ class InsertModel(BaseModel):
 
 @app.get("/")
 async def read_root():
-    return {"Hello": "World"}    
+    return {"Hello": "World"}     
 
-@app.post("/insert")
-async def insert(data: InsertModel):
-    response = supabase.table(data.table).insert(data.data).execute()
-
-    # if response.error:
-    #     raise HTTPException(status_code=400, detail=str(response.error))
-    return {"message": "Insert successful", "data": response.data}    
-
-@app.post("/query")
+@app.post("/api/query")
 async def query(data: QueryModel):
     query = supabase.table(data.table).select(data.select)
 
@@ -51,6 +43,14 @@ async def query(data: QueryModel):
     # if response.error:
     #     raise HTTPException(status_code=400, detail=str(response.error))
     return response.data
+
+@app.post("/api/insert")
+async def insert(data: InsertModel):
+    response = supabase.table(data.table).insert(data.data).execute()
+
+    # if response.error:
+    #     raise HTTPException(status_code=400, detail=str(response.error))
+    return {"message": "Insert successful", "data": response.data}   
 
 @app.get('/openapi.json')
 def get_openapi():

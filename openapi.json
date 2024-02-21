@@ -7,7 +7,7 @@
     },
     "servers": [{ "url": "https://bj-life-gpt.vercel.app" }],
     "paths": {
-      "/query": {
+      "/api/query": {
         "post": {
           "description": "Executes a supabase query to retrieve data.",
           "operationId": "query",
@@ -42,7 +42,7 @@
           }
         }
       },
-      "/insert": {
+      "/api/insert": {
         "post": {
           "description": "Executes a supabase insert data.",
           "operationId": "insert",
@@ -85,15 +85,18 @@
           "properties": {
             "table": {
               "type": "string",
+              "title": "table name",
               "description": "The name of the table to query."
             },
             "select": {
               "type": "string",
+              "title": "select columns",
               "description": "The selection string specifying the fields to return."
             },
             "conditions": {
               "type": "object",
-              "description": "The selection string specifying the fields to return."
+              "title": "filter conditions",
+              "description": "filter conditions."
             }
           },
           "required": ["table", "select", "conditions"],
@@ -104,11 +107,13 @@
           "properties": {
             "table": {
               "type": "string",
+              "title": "table name",
               "description": "The name of the table where data will be inserted."
             },
             "data": {
               "type": "object",
               "additionalProperties": true,
+              "title": "insert data",
               "description": "The data to be inserted into the table. This is a dictionary where each key-value pair represents a column name and its value to be inserted."
             }
           },
