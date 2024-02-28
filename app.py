@@ -12,7 +12,7 @@ app = FastAPI()
 
 app.add_middleware(
   CORSMiddleware,
-  allow_origins=["https://chat.openai.com","bj-life-gpt.vercel.app"],
+  allow_origins=["https://chat.openai.com","https://bj-life-gpt.vercel.app"],
   allow_methods=["*"],
   allow_headers=["*"],
   allow_credentials=False

@@ -5,7 +5,7 @@
       "description": "Query your database in English.",
       "version": "v0.0.1"
     },
-    "servers": [{ "url": "bj-life-gpt.vercel.app" }],
+    "servers": [{ "url": "https://bj-life-gpt.vercel.app" }],
     "paths": {
       "/api/query": {
         "post": {
