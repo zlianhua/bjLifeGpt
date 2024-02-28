@@ -5,7 +5,7 @@
       "description": "Query your database in English.",
       "version": "v0.0.1"
     },
-    "servers": [{ "url": "https://bj-life-gpt.vercel.app" }],
+    "servers": [{ "url": "bj-life-gpt.vercel.app" }],
     "paths": {
       "/api/query": {
         "post": {
@@ -76,7 +76,113 @@
             }
           }
         }
+      },
+      "/api/update": {
+        "post": {
+          "description": "Executes a supabase update data.",
+          "operationId": "update",
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/updateModel"
+                }
+              }
+            },
+            "required": true
+          },
+          "deprecated": false,
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "result": {
+                        "description": "The update result"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/delete": {
+        "post": {
+          "description": "Executes a supabase delete data.",
+          "operationId": "delete",
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/deleteModel"
+                }
+              }
+            },
+            "required": true
+          },
+          "deprecated": false,
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "result": {
+                        "description": "The delete result"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/createTable": {
+        "post": {
+          "description": "Executes a supabase create a table.",
+          "operationId": "createTable",
+          "parameters": [],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/tableModel"
+                }
+              }
+            },
+            "required": true
+          },
+          "deprecated": false,
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "result": {
+                        "description": "The create table result"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
+
     },
     "components": {
       "schemas": {
@@ -94,7 +200,7 @@
               "description": "The selection string specifying the fields to return."
             },
             "conditions": {
-              "type": "object",
+              "type": "string",
               "title": "filter conditions",
               "description": "filter conditions."
             }
@@ -111,7 +217,7 @@
               "description": "The name of the table where data will be inserted."
             },
             "data": {
-              "type": "object",
+              "type": "string",
               "additionalProperties": true,
               "title": "insert data",
               "description": "The data to be inserted into the table. This is a dictionary where each key-value pair represents a column name and its value to be inserted."
@@ -119,6 +225,66 @@
           },
           "required": ["table", "data"],
           "description": "A model for inserting data into a database table."
+        },
+        "updateModel": {
+          "type": "object",
+          "properties": {
+            "table": {
+              "type": "string",
+              "title": "table name",
+              "description": "The name of the table where data will be updated."
+            },
+            "data": {
+              "type": "string",
+              "additionalProperties": true,
+              "title": "update data",
+              "description": "The data to be updated to the table. This is a dictionary where each key-value pair represents a column name and its value to be updated."
+            },
+            "conditions": {
+              "type": "string",
+              "additionalProperties": true,
+              "title": "conditions",
+              "description": "The conditions to be updated to the table. This is a dictionary where each key-value pair represents a column name and its value as condition."
+            }
+          },
+          "required": ["table", "data", "conditions"],
+          "description": "A model for updating data into a database table."
+        },
+        "deleteModel": {
+          "type": "object",
+          "properties": {
+            "table": {
+              "type": "string",
+              "title": "table name",
+              "description": "The name of the table where data will be deleted."
+            },
+            "conditions": {
+              "type": "string",
+              "additionalProperties": true,
+              "title": "conditions",
+              "description": "The conditions to delete the table. This is a dictionary where each key-value pair represents a column name and its value to delete."
+            }
+          },
+          "required": ["table", "conditions"],
+          "description": "A model for deleting data into a database table."
+        },
+        "tableModel": {
+          "type": "object",
+          "properties": {
+            "table": {
+              "type": "string",
+              "title": "table name",
+              "description": "The name of the table that will be created."
+            },
+            "data": {
+              "type": "string",
+              "additionalProperties": true,
+              "title": "fields",
+              "description": "The fields to be created in the table. This is a dictionary where each key-value pair represents a column name and its data type."
+            }
+          },
+          "required": ["table", "data"],
+          "description": "A model for deleting data into a database table."
         }
       }  
     }
